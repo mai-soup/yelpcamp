@@ -63,6 +63,12 @@ app.put("/campgrounds/:id", async (req, res) => {
     res.redirect(`/campgrounds/${id}`);
 });
 
+app.delete("/campgrounds/:id", async (req, res) => {
+    const { id } = req.params;
+    await Campground.findByIdAndDelete(id);
+    res.redirect("/campgrounds");
+});
+
 app.listen(3000, () => {
     console.log("servin on 3000");
 });

@@ -18,6 +18,9 @@
     <footer>
         <a href="/campgrounds/<%= camp._id %>/edit">Edit Campground</a>
         <a href="/campgrounds">Back to List</a>
+        <form action="/campgrounds/<%= camp._id %>?_method=delete" method="post">
+            <button type="submit"> Delete Campground</button>
+        </form>
     </footer>
 </body>
 
