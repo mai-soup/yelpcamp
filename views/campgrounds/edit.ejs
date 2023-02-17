@@ -1,31 +1,48 @@
 <% layout("layouts/boilerplate") -%>
     <h1>Edit Campground</h1>
-    <form action="/campgrounds/<%= camp._id %>?_method=PUT" method="post">
+    <form action="/campgrounds/<%= camp._id %>?_method=PUT" method="post" class="needs-validation" novalidate>
         <div class="mb-2">
             <label for="title" class="form-label">Title</label>
-            <input type="text" name="campground[title]" id="title" class="form-control" value="<%= camp.title %>" />
+            <input type="text" name="campground[title]" id="title" class="form-control" value="<%= camp.title %>"
+                required />
+            <div class="invalid-feedback">
+                Camp title is required.
+            </div>
         </div>
         <div class="mb-2">
             <label for="location" class="form-label">Location</label>
             <input type="text" name="campground[location]" id="location" class="form-control"
-                value="<%= camp.location %>" />
+                value="<%= camp.location %>" required />
+            <div class="invalid-feedback">
+                Camp location is required.
+            </div>
         </div>
         <div class="mb-2">
             <label for="price" class="form-label">Price per night</label>
             <div class="input-group">
                 <div class="input-group-text">$</div>
                 <input type="number" name="campground[price]" id="price" class="form-control" min="0" step="0.01"
-                    value="<%= camp.price %>" />
+                    value="<%= camp.price %>" required />
+                <div class="invalid-feedback">
+                    Price per night is required.
+                </div>
             </div>
         </div>
         <div class="mb-2">
             <label for="image" class="form-label">Image URL</label>
-            <input type="text" name="campground[image]" id="image" class="form-control" value="<%= camp.image %>" />
+            <input type="text" name="campground[image]" id="image" class="form-control" value="<%= camp.image %>"
+                required />
+            <div class="invalid-feedback">
+                Image URL is required.
+            </div>
         </div>
         <div class="mb-2">
             <label for="description" class="form-label">Description</label>
-            <textarea name="campground[description]" id="description"
-                class="form-control"><%= camp.description %></textarea>
+            <textarea name="campground[description]" id="description" class="form-control"
+                required><%= camp.description %></textarea>
+            <div class="invalid-feedback">
+                Description is required.
+            </div>
         </div>
         <div class="mb-2">
             <button type="submit" class="btn btn-primary">Update</button>
