@@ -1,17 +1,34 @@
 <% layout("layouts/boilerplate") -%>
+    <h1>Edit Campground</h1>
     <form action="/campgrounds/<%= camp._id %>?_method=PUT" method="post">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" name="campground[title]" id="title" value="<%= camp.title %>" />
+        <div class="mb-2">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="campground[title]" id="title" class="form-control" value="<%= camp.title %>" />
         </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" name="campground[location]" id="location" value="<%= camp.location %>" />
+        <div class="mb-2">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="campground[location]" id="location" class="form-control"
+                value="<%= camp.location %>" />
         </div>
-        <div>
-            <button type="submit">Update</button>
+        <div class="mb-2">
+            <label for="price" class="form-label">Price per night</label>
+            <div class="input-group">
+                <div class="input-group-text">$</div>
+                <input type="number" name="campground[price]" id="price" class="form-control" min="0" step="0.01"
+                    value="<%= camp.price %>" />
+            </div>
+        </div>
+        <div class="mb-2">
+            <label for="image" class="form-label">Image URL</label>
+            <input type="text" name="campground[image]" id="image" class="form-control" value="<%= camp.image %>" />
+        </div>
+        <div class="mb-2">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="campground[description]" id="description"
+                class="form-control"><%= camp.description %></textarea>
+        </div>
+        <div class="mb-2">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="/campgrounds<%= camp._id %>" class="btn btn-secondary">Back to Details</a>
         </div>
     </form>
-    <footer>
-        <a href="/campgrounds/<%= camp._id %>">Back to Details</a>
-    </footer>
