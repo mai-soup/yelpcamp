@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const cities = require("./cities");
 const { descriptors, nouns } = require("./seedHelpers");
 const Campground = require("../models/campground");
+const loremIpsum = require("lorem-ipsum").loremIpsum;
 
 mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp", {
     useNewUrlParser: true,
@@ -25,7 +26,10 @@ const seedDB = async () => {
         const random1000 = Math.floor(Math.random() * 1000);
         const c = new Campground({
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
-            title: `${sample(descriptors)} ${sample(nouns)}`
+            title: `${sample(descriptors)} ${sample(nouns)}`,
+            image: "https://source.unsplash.com/collection/1114848",
+            description: loremIpsum({ sentenceLowerBound: 5, sentenceUpperBound: 30 }),
+            price: (Math.floor(Math.random() * 2999) + 1000) / 100
         });
         await c.save();
     }
