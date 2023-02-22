@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+<nav class="navbar navbar-expand-sm sticky-top navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">YelpCamp</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -13,6 +13,23 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/campgrounds">Campgrounds</a>
                 </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <% if (!user) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Sign Up</a>
+                    </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <p class="nav-link mb-0 pe-none">Hello, <%= user.username %>!</p>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Log Out</a>
+                        </li>
+                        <% } %>
             </ul>
         </div>
     </div>
