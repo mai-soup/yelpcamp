@@ -89,7 +89,6 @@ app.get("/", (req, res) => {
 
 app.get("/campgrounds", catchAsync(async (req, res) => {
     const camps = await Campground.find({}).sort({ date: "desc" });
-    console.log(camps);
     res.render("campgrounds/index", { camps });
 }));
 
@@ -112,7 +111,6 @@ app.get("/campgrounds/:id/edit", mustLogin, catchAsync(async (req, res) => {
 app.post("/campgrounds", mustLogin, validator, catchAsync(async (req, res) => {
     const c = new Campground(req.body.campground);
     await c.save();
-    console.log(c);
     req.flash("success", "Successfully created campground.");
     res.redirect(`/campgrounds/${c._id}`);
 }));
@@ -151,10 +149,12 @@ app.get("/login", (req, res) => {
     res.render("login");
 });
 
-app.post("/login", passport.authenticate("local", { failureFlash: true, failureRedirect: "/login" }),
+app.post("/login", passport.authenticate("local", { failureFlash: true, failureRedirect: "/login", keepSessionInfo: true }),
     catchAsync(async (req, res) => {
+        const redirectUrl = req.session.redirectTo || "/campgrounds";
+        delete req.session.redirectTo;
         req.flash("success", "Welcome back!");
-        res.redirect("/campgrounds");
+        res.redirect(redirectUrl);
     }));
 
 app.get("/logout", (req, res) => {
