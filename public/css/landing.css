@@ -39,10 +39,9 @@ body {
 
 #campground-button {
     font-weight: 700;
-    transition: transform 0.4s, font-weight 0.4s;
+    transition: transform 0.4s;
 }
 
 #campground-button:hover {
     transform: translate(0, -5px);
-    font-weight: 400;
 }
