@@ -135,13 +135,17 @@ app.get("/signup", (req, res) => {
     res.render("signup");
 });
 
-app.post("/signup", (req, res) => {
+app.post("/signup", catchAsync(async (req, res) => {
     const { email, username, password } = req.body.user;
     const user = new User({ email, username });
-    User.register(user, password);
-    req.flash("Welcome to YelpCamp!");
-    res.redirect("/campgrounds");
-});
+    const newUser = await User.register(user, password);
+    req.login(newUser, err => {
+        if (err) return next(err);
+
+        req.flash("Welcome to YelpCamp!");
+        return res.redirect("/campgrounds");
+    });
+}));
 
 app.get("/login", (req, res) => {
     res.render("login");
