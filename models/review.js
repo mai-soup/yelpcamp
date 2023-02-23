@@ -4,6 +4,7 @@ const SchemaTypes = mongoose.SchemaTypes;
 
 const ReviewSchema = new Schema({
     rating: {
+        // TODO: add validation
         type: Number,
         required: true
     },
