@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
+
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -11,7 +15,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const campgroundRoutes = require("./routes/campgrounds");
-const reviewRoutes = require("./routes/reviews")
+const reviewRoutes = require("./routes/reviews");
 
 mongoose.set("strictQuery", false);
 
@@ -31,7 +35,7 @@ const app = express();
 // sessions
 app.use(
     session({
-        secret: 'secret',
+        secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
         cookie: {

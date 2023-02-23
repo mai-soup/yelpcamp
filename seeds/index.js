@@ -30,7 +30,16 @@ const seedDB = async () => {
         const c = new Campground({
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(nouns)}`,
-            image: "https://source.unsplash.com/collection/1114848",
+            images: [
+                {
+                    filename: 'YelpCamp/xfstmyh2qzk3i5dyo7mo',
+                    url: 'https://res.cloudinary.com/dmivfa33d/image/upload/v1677188764/YelpCamp/xfstmyh2qzk3i5dyo7mo.jpg',
+                },
+                {
+                    filename: 'YelpCamp/pyrukgy6ozvgyhqwlbqf',
+                    url: 'https://res.cloudinary.com/dmivfa33d/image/upload/v1677188766/YelpCamp/pyrukgy6ozvgyhqwlbqf.jpg',
+                }
+            ],
             description: loremIpsum({ sentenceLowerBound: 5, sentenceUpperBound: 30 }),
             price: (Math.floor(Math.random() * 2999) + 1000) / 100,
             author
