@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const cities = require("./cities");
 const { descriptors, nouns } = require("./seedHelpers");
 const Campground = require("../models/campground");
+const User = require("../models/user")
 const loremIpsum = require("lorem-ipsum").loremIpsum;
 
 mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp", {
@@ -22,6 +23,8 @@ const sample = (arr) => {
 
 const seedDB = async () => {
     await Campground.deleteMany({}); // delete all campgrounds
+    const owner = await User.findById("63f68614766d371556975a13");
+    if (!owner) console.error("NO USER WITH THAT ID FOUND");
     for (let i = 0; i < 50; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
         const c = new Campground({
@@ -29,7 +32,8 @@ const seedDB = async () => {
             title: `${sample(descriptors)} ${sample(nouns)}`,
             image: "https://source.unsplash.com/collection/1114848",
             description: loremIpsum({ sentenceLowerBound: 5, sentenceUpperBound: 30 }),
-            price: (Math.floor(Math.random() * 2999) + 1000) / 100
+            price: (Math.floor(Math.random() * 2999) + 1000) / 100,
+            owner
         });
         await c.save();
     }

@@ -13,6 +13,9 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const { mustLogin } = require("./middleware");
+const dayjs = require("dayjs");
+const relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
 
 mongoose.set("strictQuery", false);
 
@@ -98,8 +101,9 @@ app.get("/campgrounds/new", mustLogin, (req, res) => {
 
 app.get("/campgrounds/:id", catchAsync(async (req, res) => {
     const { id } = req.params;
-    const camp = await Campground.findById(id);
-    res.render("campgrounds/show", { camp });
+    const camp = await Campground.findById(id).populate("owner");
+    const age = dayjs(camp.date).fromNow();
+    res.render("campgrounds/show", { camp, age });
 }));
 
 app.get("/campgrounds/:id/edit", mustLogin, catchAsync(async (req, res) => {

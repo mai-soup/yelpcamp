@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const SchemaTypes = mongoose.SchemaTypes;
 
 const CampgroundSchema = new Schema({
+    // TODO: update required fields
     title: String,
     price: Number,
     description: String,
@@ -10,7 +12,12 @@ const CampgroundSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    owner: {
+        type: SchemaTypes.ObjectId,
+        ref: "User",
+        required: true,
+    },
 });
 
 module.exports = mongoose.model("Campground", CampgroundSchema);
