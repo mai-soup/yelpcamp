@@ -7,14 +7,16 @@ const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
 const Joi = require("joi");
 const Campground = require("./models/campground");
+const Review = require("./models/review");
 const User = require("./models/user")
 const { join } = require("path");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
-const { mustLogin } = require("./middleware");
+const { mustLogin, isAuthor } = require("./middleware");
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
+const review = require("./models/review");
 dayjs.extend(relativeTime);
 
 mongoose.set("strictQuery", false);
@@ -101,15 +103,39 @@ app.get("/campgrounds/new", mustLogin, (req, res) => {
 
 app.get("/campgrounds/:id", catchAsync(async (req, res) => {
     const { id } = req.params;
-    const camp = await Campground.findById(id).populate("owner");
+    const camp = await Campground.findById(id).populate("author");
     const age = dayjs(camp.date).fromNow();
-    res.render("campgrounds/show", { camp, age });
+    const reviews = await Review.find({ campground: { _id: id } }).populate("author");
+    res.render("campgrounds/show", { camp, age, reviews });
 }));
 
-app.get("/campgrounds/:id/edit", mustLogin, catchAsync(async (req, res) => {
+app.get("/campgrounds/:id/edit", mustLogin, isAuthor, catchAsync(async (req, res) => {
     const { id } = req.params;
     const camp = await Campground.findById(id);
     res.render("campgrounds/edit", { camp });
+}));
+
+app.post("/campgrounds/:id/reviews", mustLogin, catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const r = new review(req.body.review);
+    r.campground = await Campground.findById(id);
+    r.author = req.user;
+    await r.save();
+    req.flash("success", "Successfully added review");
+    res.redirect(`/campgrounds/${id}`)
+}));
+
+app.delete("/campgrounds/:id/reviews/:reviewId", mustLogin, catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    const r = await Review.findById(reviewId);
+    if (r.author.equals(req.user._id)) {
+        await Review.deleteOne({ _id: reviewId });
+        req.flash("success", "Successfully deleted review");
+
+    } else {
+        req.flash("error", "You don't have the permissions to do that.");
+    }
+    res.redirect(`/campgrounds/${id}`)
 }));
 
 app.post("/campgrounds", mustLogin, validator, catchAsync(async (req, res) => {

@@ -13,7 +13,7 @@ const CampgroundSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    owner: {
+    author: {
         type: SchemaTypes.ObjectId,
         ref: "User",
         required: true,

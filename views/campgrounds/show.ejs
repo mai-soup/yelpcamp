@@ -1,7 +1,9 @@
 <% layout("layouts/boilerplate") -%>
+    <link rel="stylesheet" href="/css/starability-basic.css" />
+
     <%- partial("../partials/flash-messages") %>
         <div class="row">
-            <div class="col-8 offset-2">
+            <div class="col-6">
                 <div class="card">
                     <img src="<%= camp.image %>" class="card-img-top" alt="<%= camp.title %>">
                     <div class="card-body">
@@ -19,16 +21,81 @@
                         <li class="list-group-item">$<%= camp.price %> per night
                         </li>
                     </ul>
-                    <div class="card-body">
-                        <a href="/campgrounds/<%= camp._id %>/edit" class="card-link btn btn-primary">Edit</a>
-                        <form action="/campgrounds/<%= camp._id %>?_method=delete" method="post" class="d-inline">
-                            <button type="submit" class="card-link btn btn-danger ">Delete</button>
-                        </form>
-                    </div>
-                    <div class="card-footer text-muted">
-                        By <%= camp.owner.username %>
-                            <%= age %>
-                    </div>
+                    <% if (user && camp.author.equals(user._id)) { %>
+                        <div class="card-body">
+                            <a href="/campgrounds/<%= camp._id %>/edit" class="card-link btn btn-primary">Edit</a>
+                            <form action="/campgrounds/<%= camp._id %>?_method=delete" method="post" class="d-inline">
+                                <button type="submit" class="card-link btn btn-danger ">Delete</button>
+                            </form>
+                        </div>
+                        <% } %>
+                            <div class="card-footer text-muted">
+                                By <%= camp.author.username %>
+                                    <%= age %>
+                            </div>
                 </div>
+            </div>
+            <div class="col-6">
+                <% if (user) { %>
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Add a review</h5>
+                            <form action="/campgrounds/<%= camp._id %>/reviews" method="post">
+                                <fieldset class="starability-basic form-control mb-1">
+                                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]"
+                                        value="3" checked aria-label="No rating." />
+
+                                    <input type="radio" id="rate1" name="review[rating]" value="1" />
+                                    <label for="rate1">1 star.</label>
+
+                                    <input type="radio" id="rate2" name="review[rating]" value="2" />
+                                    <label for="rate2">2 stars.</label>
+
+                                    <input type="radio" id="rate3" name="review[rating]" value="3" checked />
+                                    <label for="rate3">3 stars.</label>
+
+                                    <input type="radio" id="rate4" name="review[rating]" value="4" />
+                                    <label for="rate4">4 stars.</label>
+
+                                    <input type="radio" id="rate5" name="review[rating]" value="5" />
+                                    <label for="rate5">5 stars.</label>
+
+                                    <span class="starability-focus-ring"></span>
+                                </fieldset>
+                                <div class="mb-2">
+                                    <textarea name="review[text]" id="review[text]" cols="30" rows="4"
+                                        class="form-control" placeholder="Your review here..."></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <button type="submit" class="btn btn-primary">Post</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <% } %>
+                        <% for (review of reviews) {%>
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <p class="starability-result" data-rating="<%= review.rating %>">
+                                        Rated <%= review.rating %> stars.
+                                    </p>
+                                    <p>
+                                        <%= review.text %>
+                                    </p>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <span>By <%= review.author.username %>
+                                            <% if (user && review.author.equals(user._id)) { %>
+                                                <form class="d-inline"
+                                                    action="/campgrounds/<%= camp._id %>/reviews/<%= review._id %>?_method=delete"
+                                                    method="post">
+                                                    <button type="submit"
+                                                        class="btn btn-outline-danger btn-sm ms-2">Delete</button>
+                                                </form>
+                                                <% } %>
+                                    </span>
+                                </div>
+                            </div>
+                            <% } %>
             </div>
         </div>

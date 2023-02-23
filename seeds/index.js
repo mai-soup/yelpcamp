@@ -23,8 +23,8 @@ const sample = (arr) => {
 
 const seedDB = async () => {
     await Campground.deleteMany({}); // delete all campgrounds
-    const owner = await User.findById("63f68614766d371556975a13");
-    if (!owner) console.error("NO USER WITH THAT ID FOUND");
+    const author = await User.findById("63f68614766d371556975a13");
+    if (!author) console.error("NO USER WITH THAT ID FOUND");
     for (let i = 0; i < 50; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
         const c = new Campground({
@@ -33,7 +33,7 @@ const seedDB = async () => {
             image: "https://source.unsplash.com/collection/1114848",
             description: loremIpsum({ sentenceLowerBound: 5, sentenceUpperBound: 30 }),
             price: (Math.floor(Math.random() * 2999) + 1000) / 100,
-            owner
+            author
         });
         await c.save();
     }
