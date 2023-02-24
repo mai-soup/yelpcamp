@@ -27,7 +27,8 @@ module.exports.campValidator = (req, res, next) => {
             // image: Joi.string().required(),
             description: Joi.string().required(),
             location: Joi.string().required()
-        }).required()
+        }).required(),
+        deleteImages: Joi.array()
     });
     const { error } = campValidationSchema.validate(req.body);
     if (!error) return next();

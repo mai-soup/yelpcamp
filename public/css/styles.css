@@ -1,0 +1,15 @@
+.img-thumbnail {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.deletion-check {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.deletion-thumbnail-holder {
+    position: relative
+}

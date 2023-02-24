@@ -2,6 +2,7 @@ const Campground = require("../models/campground");
 const Review = require("../models/review");
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime");
+const { cloudinary } = require("../cloudinary");
 dayjs.extend(relativeTime);
 
 
@@ -20,7 +21,7 @@ module.exports.showCampground = async (req, res) => {
 
 module.exports.showEditForm = async (req, res) => {
     const { id } = req.params;
-    const camp = await Campground.findById(id);
+    const camp = await Campground.findById(id).populate("images");
     res.render("campgrounds/edit", { camp });
 };
 
@@ -41,9 +42,20 @@ module.exports.createNew = async (req, res) => {
 module.exports.update = async (req, res) => {
     const { id } = req.params;
     const c = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
     c.images.push(...imgs);
     await c.save();
+
+    if (req.body.deleteImages) {
+        for (let img of req.body.deleteImages) {
+            cloudinary.uploader.destroy(img);
+        }
+        await c.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } });
+    }
+
+    // TODO: default image if there are none
+
     req.flash("success", "Successfully updated campground.");
     res.redirect(`/campgrounds/${id}`);
 };
