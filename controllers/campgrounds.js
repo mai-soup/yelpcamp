@@ -32,8 +32,7 @@ module.exports.showNewForm = (req, res) => {
 module.exports.createNew = async (req, res) => {
     const c = new Campground(req.body.campground);
     c.author = req.user._id;
-    c.images = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    console.log(c);
+    c.images = req.files.map(f => ({ original_url: f.path, filename: f.filename }));
     await c.save();
     req.flash("success", "Successfully created campground.");
     res.redirect(`/campgrounds/${c._id}`);
@@ -43,7 +42,7 @@ module.exports.update = async (req, res) => {
     const { id } = req.params;
     const c = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
 
-    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    const imgs = req.files.map(f => ({ original_url: f.path, filename: f.filename }));
     c.images.push(...imgs);
     await c.save();
 
@@ -55,6 +54,7 @@ module.exports.update = async (req, res) => {
     }
 
     // TODO: default image if there are none
+    // TODO: limit # of images per upload and per camp
 
     req.flash("success", "Successfully updated campground.");
     res.redirect(`/campgrounds/${id}`);
