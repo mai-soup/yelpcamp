@@ -20,7 +20,7 @@ const helmet = require("helmet");
 
 mongoose.set("strictQuery", false);
 
-mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp", {
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@yelpcamp.yu7u2n8.mongodb.net/?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
