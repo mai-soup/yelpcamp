@@ -17,10 +17,11 @@ const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const MongoStore = require("connect-mongo");
 
+const dbUrl = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@yelpcamp.yu7u2n8.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.set("strictQuery", false);
-
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@yelpcamp.yu7u2n8.mongodb.net/?retryWrites=true&w=majority`, {
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -33,9 +34,18 @@ db.once("open", () => {
 
 const app = express();
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: process.env.SESSION_STORE_SECRET
+    }
+});
+
 // sessions
 app.use(
     session({
+        store,
         name: "yc-sess",
         secret: process.env.SESSION_SECRET,
         resave: false,
