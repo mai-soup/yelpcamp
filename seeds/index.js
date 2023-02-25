@@ -4,6 +4,7 @@ const { descriptors, nouns } = require("./seedHelpers");
 const Campground = require("../models/campground");
 const User = require("../models/user")
 const loremIpsum = require("lorem-ipsum").loremIpsum;
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 
 mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp", {
     useNewUrlParser: true,
@@ -27,8 +28,10 @@ const seedDB = async () => {
     if (!author) console.error("NO USER WITH THAT ID FOUND");
     for (let i = 0; i < 50; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
+        const locationString = `${cities[random1000].city}, ${cities[random1000].state}`;
+        const coords = [cities[random1000].longitude, cities[random1000].latitude];
         const c = new Campground({
-            location: `${cities[random1000].city}, ${cities[random1000].state}`,
+            location: locationString,
             title: `${sample(descriptors)} ${sample(nouns)}`,
             images: [
                 {
@@ -42,7 +45,11 @@ const seedDB = async () => {
             ],
             description: loremIpsum({ sentenceLowerBound: 5, sentenceUpperBound: 30 }),
             price: (Math.floor(Math.random() * 2999) + 1000) / 100,
-            author
+            author,
+            geometry: {
+                type: "Point",
+                coordinates: coords
+            }
         });
         await c.save();
     }

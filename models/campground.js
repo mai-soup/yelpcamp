@@ -27,6 +27,17 @@ const CampgroundSchema = new Schema({
     price: Number,
     description: String,
     location: String,
+    geometry: {
+        type: {
+            type: String,
+            enum: ["Point"],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     images: [ImageSchema],
     date: {
         type: Date,
@@ -37,6 +48,10 @@ const CampgroundSchema = new Schema({
         ref: "User",
         required: true,
     },
+}, { toJSON: { virtuals: true } });
+
+CampgroundSchema.virtual("properties.popupHtml").get(function () {
+    return `<a href="/campgrounds/${this._id}"><strong>${this.title}</strong></a><p>${this.description.substring(0, 100)}</p>`
 });
 
 module.exports = mongoose.model("Campground", CampgroundSchema);

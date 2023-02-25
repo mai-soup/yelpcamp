@@ -1,6 +1,10 @@
 <% layout("layouts/boilerplate") -%>
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+<div id="cluster-map"></div>
     <h1 class="text-center">All Campgrounds</h1>
     <%- partial("../partials/flash-messages") %>
+    
         <div class="text-center">
             <a href="/campgrounds/new" class="btn btn-success mb-2">Add new</a>
         </div>
@@ -27,3 +31,8 @@
                 </div>
             </div>
             <% } %>
+            <script>
+                const mbxToken = "<%- process.env.MAPBOX_TOKEN %>";
+                const data = {features: <%-JSON.stringify(camps)%> };
+            </script>
+            <script src="/js/clusterMap.js"></script>

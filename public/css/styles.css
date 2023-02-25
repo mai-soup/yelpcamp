@@ -13,3 +13,13 @@
 .deletion-thumbnail-holder {
     position: relative
 }
+
+#cluster-map {
+    width: 100%;
+    height: 500px;
+}
+
+#single-camp-map {
+    width: 100%;
+    height: 300px;
+}
