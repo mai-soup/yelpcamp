@@ -4,7 +4,6 @@ const { descriptors, nouns } = require("./seedHelpers");
 const Campground = require("../models/campground");
 const User = require("../models/user")
 const loremIpsum = require("lorem-ipsum").loremIpsum;
-const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 
 mongoose.connect("mongodb://127.0.0.1:27017/yelpcamp", {
     useNewUrlParser: true,

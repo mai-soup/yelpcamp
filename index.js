@@ -16,6 +16,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
+const mongoSanitize = require("express-mongo-sanitize");
 
 mongoose.set("strictQuery", false);
 
@@ -53,6 +54,7 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(mongoSanitize());
 
 app.use(passport.initialize());
 app.use(passport.session());
