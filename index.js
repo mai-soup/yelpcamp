@@ -36,11 +36,14 @@ const app = express();
 // sessions
 app.use(
     session({
+        name: "yc-sess",
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
         cookie: {
+            httpOnly: true,
             maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+            expires: Date.now() + 1000 * 60 * 60 * 24 * 7
         },
     })
 );
